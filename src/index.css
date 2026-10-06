@@ -1,0 +1,317 @@
+/* ============================================================
+   CodzLabZim - design system (light, premium, restrained)
+   Tokens first: colour, type, space, radius, shadow, motion.
+   Only keyframes + complex shapes live as custom CSS.
+   ============================================================ */
+@import "tailwindcss";
+
+@theme {
+  /* Surfaces */
+  --color-bg: #FFFFFF;
+  --color-bg-subtle: #F8F5F2;
+  --color-bg-muted: #F1ECE7;
+
+  /* Ink & text */
+  --color-ink: #1B1512;
+  --color-ink-2: #453A32;
+  --color-muted: #78685C;
+  --color-muted-2: #A79888;
+
+  /* Lines */
+  --color-line: #EAE2DA;
+  --color-line-strong: #D8CCBF;
+
+  /* Brand - warm terracotta clay */
+  --color-brand: #B4512B;
+  --color-brand-strong: #93371D;
+  --color-brand-soft: #F8E8E0;
+
+  /* Accent - gold */
+  --color-gold: #C08A3E;
+
+  /* Status - meaningful states only */
+  --color-success: #12B76A;
+  --color-success-text: #067647;
+  --color-success-soft: #ECFDF3;
+  --color-warning: #F79009;
+  --color-warning-text: #B54708;
+  --color-warning-soft: #FFFAEB;
+  --color-danger: #D92D20;
+  --color-danger-text: #B42318;
+  --color-danger-soft: #FEF3F2;
+
+  /* Type - one family */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-card: 14px;
+  --radius-panel: 18px;
+
+  /* Shadows - restrained */
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.07), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 10px 28px -10px rgba(16, 24, 40, 0.12);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Subtle keyframe consumers */
+  --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+  --animate-typing: typing-blink 1.2s infinite;
+  --animate-bar-grow: bar-grow 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-flow-run: flow-run 2.2s linear infinite;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@keyframes typing-blink {
+  0%, 100% { opacity: 0.25; }
+  40% { opacity: 1; }
+}
+@keyframes bar-grow {
+  from { transform: scaleY(0.12); opacity: 0.4; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+@keyframes flow-run {
+  from { top: -3px; opacity: 1; }
+  to { top: 13px; opacity: 0.2; }
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--color-ink-2);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+    margin: 0;
+    color: var(--color-ink);
+  }
+
+  p { text-wrap: pretty; margin: 0; }
+
+  ::selection {
+    background: rgba(180, 81, 43, 0.16);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* Hash-link scroll offset under the sticky navbar */
+  [id] { scroll-margin-top: calc(68px + 1.25rem); }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--color-bg-subtle); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border-radius: 8px;
+    border: 2px solid var(--color-bg-subtle);
+  }
+
+  /* Lock page scroll while the mobile menu is open */
+  body.menu-open { overflow: hidden; }
+
+  /* Respect reduced-motion preferences globally */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ---------- Small helpers (complex shapes only) ---------- */
+
+/* Brand emphasis text (headlines) */
+.grad-text {
+  color: var(--color-brand);
+}
+
+/* Button micro-interaction layer (calm when untouched) */
+.btn-press {
+  transition:
+    background-color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out),
+    color 0.2s var(--ease-out),
+    transform 0.14s var(--ease-out);
+}
+.btn-press:hover {
+  transform: translateY(-1px);
+}
+.btn-press:active {
+  transform: scale(0.98);
+}
+.btn-press svg {
+  transition: transform 0.2s var(--ease-out);
+}
+.btn-press:hover svg {
+  transform: translateX(3px);
+}
+.btn-press:active svg {
+  transform: translateX(1px);
+}
+.btn-press:disabled:hover,
+.btn-press:disabled:active {
+  transform: none;
+}
+.btn-press:disabled:hover svg,
+.btn-press:disabled:active svg {
+  transform: none;
+}
+
+/* Animated underline draw for text links */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition: background-size 0.25s var(--ease-out), color 0.2s var(--ease-out);
+}
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1.5px;
+}
+
+/* Interactive card lift (cards that contain actions) */
+.card-interactive {
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+.card-interactive:hover {
+  transform: translateY(-2px);
+}
+
+/* Storytelling screenshot swap (opacity + micro-scale, GPU-friendly) */
+.story-visual {
+  transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+  will-change: opacity, transform;
+}
+
+/* Subtle cursor depth for hero product visual (JS sets --dx/--dy, max ~3px) */
+.depth-tilt {
+  transition: transform 0.35s var(--ease-out);
+  transform: translate3d(var(--dx, 0px), var(--dy, 0px), 0);
+}
+
+/* Hero word rotator - quiet crossfade */
+.rotator {
+  display: inline-grid;
+  vertical-align: bottom;
+}
+.rotator > span {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+.rotator > span.is-active { opacity: 1; }
+
+/* Chart bars (product mockups) */
+.chart-bars i {
+  flex: 1;
+  border-radius: 4px 4px 2px 2px;
+  background: var(--color-brand);
+  opacity: 0.85;
+  transform-origin: bottom;
+  animation: bar-grow 0.7s var(--ease-out) both;
+}
+.chart-bars i:nth-child(even) { opacity: 0.45; }
+.chart-bars i:nth-child(1) { height: 38%; animation-delay: 0.05s; }
+.chart-bars i:nth-child(2) { height: 58%; animation-delay: 0.1s; }
+.chart-bars i:nth-child(3) { height: 44%; animation-delay: 0.15s; }
+.chart-bars i:nth-child(4) { height: 76%; animation-delay: 0.2s; }
+.chart-bars i:nth-child(5) { height: 62%; animation-delay: 0.25s; }
+.chart-bars i:nth-child(6) { height: 92%; animation-delay: 0.3s; }
+.chart-bars i:nth-child(7) { height: 70%; animation-delay: 0.35s; }
+
+/* Typing indicator dots (product mockups) */
+.typing i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-brand);
+  animation: typing-blink 1.2s infinite;
+}
+.typing i:nth-child(2) { animation-delay: 0.18s; }
+.typing i:nth-child(3) { animation-delay: 0.36s; }
+
+/* AI flow connector (product mockups) */
+.flow-connector {
+  width: 2px;
+  height: 14px;
+  margin-left: 19px;
+  background: var(--color-line-strong);
+  border-radius: 2px;
+  position: relative;
+}
+.flow-connector::after {
+  content: "";
+  position: absolute;
+  inset: -3px auto auto -2.5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-brand);
+  animation: flow-run 2.2s linear infinite;
+}
+
+/* Sparkline shape (product mockups) */
+.spark {
+  height: 30px;
+  margin-top: 0.35rem;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(180, 81, 43, 0.35), rgba(180, 81, 43, 0.12));
+  clip-path: polygon(0 62%, 12% 55%, 24% 70%, 38% 30%, 52% 46%, 66% 18%, 80% 38%, 92% 12%, 100% 24%, 100% 100%, 0 100%);
+}
+
+/* Chat bubbles (product mockups) */
+.ui-msg {
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  max-width: 88%;
+}
+.ui-msg.in {
+  background: var(--color-bg-muted);
+  border-bottom-left-radius: 4px;
+}
+.ui-msg.out {
+  background: var(--color-brand);
+  color: #fff;
+  font-weight: 500;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
